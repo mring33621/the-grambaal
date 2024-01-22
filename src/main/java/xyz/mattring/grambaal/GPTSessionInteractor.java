@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 public class GPTSessionInteractor implements Runnable {
@@ -43,18 +44,18 @@ public class GPTSessionInteractor implements Runnable {
         }
     }
 
-    static HttpResponse<String> post(String url, String apiKey, String content) throws IOException {
+    static HttpResponse<String> post(String url, String apiKey, String model, String content) throws IOException {
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2);
         try (HttpClient httpClient = builder.build()) {
             final String reqTemplate = """
                     {
-                          "model": "gpt-3.5-turbo",
+                          "model": "%s",
                           "messages": [{"role": "user", "content": %s}],
                           "temperature": 0.7
                     }
                     """;
-            final String reqBody = String.format(reqTemplate, JSONObject.quote(content));
+            final String reqBody = String.format(reqTemplate, model, JSONObject.quote(content));
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL))
                     .timeout(Duration.ofMinutes(1))
@@ -79,12 +80,45 @@ public class GPTSessionInteractor implements Runnable {
         return choices.getJSONObject(0).getJSONObject("message").getString("content");
     }
 
+    static String fixSessionFileName(String sessionName) {
+        if (sessionName == null) {
+            return null;
+        }
+        if (!sessionName.startsWith("session-")) {
+            sessionName = "session-" + sessionName;
+        }
+        return sessionName;
+    }
+
     private final String session;
     private final String newUserPromptFile;
+    private String model;
 
     public GPTSessionInteractor(String session, String newUserPromptFile) {
-        this.session = session;
+        this(session, newUserPromptFile, "gpt-3.5-turbo");
+    }
+
+    public GPTSessionInteractor(String session, String newUserPromptFile, String model) {
+        this.session = fixSessionFileName(session);
         this.newUserPromptFile = newUserPromptFile;
+        this.model = model;
+    }
+
+    public static Optional<String> getConvoTextForSession(String session) {
+        if (session == null) {
+            return Optional.empty();
+        }
+        String sessionName = fixSessionFileName(session);
+        String sessionPath = expandTilde("~/grambaal/sessions");
+        File sessionFile =
+                Path.of(sessionPath, sessionName + ".txt").toFile();
+        String fullSessionConvo = null;
+        try {
+            fullSessionConvo = Files.readString(sessionFile.toPath());
+        } catch (IOException e) {
+            fullSessionConvo = "Error: " + e.getMessage();
+        }
+        return Optional.ofNullable(fullSessionConvo);
     }
 
     @Override
@@ -125,19 +159,17 @@ public class GPTSessionInteractor implements Runnable {
 
         String response = null;
         try {
-            response = post(API_URL, apiKey, fullSessionConvo).body();
+            response = post(API_URL, apiKey, model, fullSessionConvo).body();
             boolean apiError = hasError(response);
             if (apiError) {
                 System.err.println("API error: \n" + response);
-                System.exit(1);
+//                System.exit(1);
             }
             String assistantResponseTxt = extractAssistantResponse(response);
             appendContentAndDividers(sessionFile, assistantResponseTxt, GPT_RESP_DIVIDER);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        System.exit(0);
     }
 
     public static void main(String[] args) {
@@ -145,6 +177,7 @@ public class GPTSessionInteractor implements Runnable {
         String newUserPromptFile = args[1];
         GPTSessionInteractor GPTSessionInteractor = new GPTSessionInteractor(session, newUserPromptFile);
         GPTSessionInteractor.run();
+//        System.exit(0);
     }
 
 }
