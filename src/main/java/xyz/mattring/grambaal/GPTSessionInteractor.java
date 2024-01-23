@@ -2,6 +2,7 @@ package xyz.mattring.grambaal;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import xyz.mattring.grambaal.oai.OAIModel;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -92,16 +93,20 @@ public class GPTSessionInteractor implements Runnable {
 
     private final String session;
     private final String newUserPromptFile;
-    private String model;
+    private String modelName;
 
     public GPTSessionInteractor(String session, String newUserPromptFile) {
         this(session, newUserPromptFile, "gpt-3.5-turbo");
     }
 
-    public GPTSessionInteractor(String session, String newUserPromptFile, String model) {
+    public GPTSessionInteractor(String session, String newUserPromptFile, String modelName) {
         this.session = fixSessionFileName(session);
         this.newUserPromptFile = newUserPromptFile;
-        this.model = model;
+        this.modelName = modelName;
+    }
+
+    public GPTSessionInteractor(String session, String newUserPromptFile, OAIModel model) {
+        this(session, newUserPromptFile, model.getModelName());
     }
 
     public static Optional<String> getConvoTextForSession(String session) {
@@ -159,7 +164,7 @@ public class GPTSessionInteractor implements Runnable {
 
         String response = null;
         try {
-            response = post(API_URL, apiKey, model, fullSessionConvo).body();
+            response = post(API_URL, apiKey, modelName, fullSessionConvo).body();
             boolean apiError = hasError(response);
             if (apiError) {
                 System.err.println("API error: \n" + response);
