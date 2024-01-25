@@ -2,7 +2,7 @@ package xyz.mattring.grambaal;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import xyz.mattring.grambaal.oai.OAIModel;
+import xyz.mattring.grambaal.oai.GPTModel;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -93,10 +93,10 @@ public class GPTSessionInteractor implements Runnable {
 
     private final String session;
     private final String newUserPromptFile;
-    private String modelName;
+    private final String modelName;
 
     public GPTSessionInteractor(String session, String newUserPromptFile) {
-        this(session, newUserPromptFile, "gpt-3.5-turbo");
+        this(session, newUserPromptFile, GPTModel.GPT_4);
     }
 
     public GPTSessionInteractor(String session, String newUserPromptFile, String modelName) {
@@ -105,7 +105,7 @@ public class GPTSessionInteractor implements Runnable {
         this.modelName = modelName;
     }
 
-    public GPTSessionInteractor(String session, String newUserPromptFile, OAIModel model) {
+    public GPTSessionInteractor(String session, String newUserPromptFile, GPTModel model) {
         this(session, newUserPromptFile, model.getModelName());
     }
 
