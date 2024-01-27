@@ -15,6 +15,8 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
@@ -26,17 +28,33 @@ public class GPTSessionInteractor implements Runnable {
     static final String USER_FOLLOWUP_DIVIDER = "<user_followup>";
     public static final String GRAMBAAL_API_KEY = "GRAMBAAL_API_KEY";
 
+    static String annotateDivider(String divider, String modelName) {
+        String annotatedDivider = divider;
+        if (GPT_RESP_DIVIDER.equals(divider)) {
+            String modelAnno = String.format(" model=\"%s\"", modelName);
+            annotatedDivider = annotatedDivider.replace(">", modelAnno + ">");
+        }
+        final LocalDateTime now = LocalDateTime.now();
+        // Format the LocalDateTime object using the ISO 8601 date format
+        final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        final String formattedDateTime = formatter.format(now);
+        annotatedDivider = annotatedDivider.replace(">", " timestamp=\"" + formattedDateTime + "\">");
+        return annotatedDivider;
+    }
+
     static String expandTilde(String path) {
-        return path.replaceFirst("^~", Matcher.quoteReplacement(System.getProperty("user.home")));
+        String expandedPath = path.replaceFirst("^~", Matcher.quoteReplacement(System.getProperty("user.home")));
+        String normalizedPath = Path.of(expandedPath).normalize().toString();
+        return normalizedPath;
     }
 
     static String getEndDivider(String divider) {
         return divider.replace("<", "</");
     }
 
-    static void appendContentAndDividers(File sessionFile, String content, String divider) {
+    static void appendContentAndDividers(File sessionFile, String content, String divider, String model) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(sessionFile, true))) {
-            pw.println(divider);
+            pw.println(annotateDivider(divider, model));
             pw.println(content);
             pw.println(getEndDivider(divider));
             pw.flush();
@@ -45,7 +63,7 @@ public class GPTSessionInteractor implements Runnable {
         }
     }
 
-    static HttpResponse<String> post(String url, String apiKey, String model, String content) throws IOException {
+    static HttpResponse<String> post(String url, String apiKey, String modelName, String content) throws IOException {
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2);
         try (HttpClient httpClient = builder.build()) {
@@ -56,9 +74,9 @@ public class GPTSessionInteractor implements Runnable {
                           "temperature": 0.7
                     }
                     """;
-            final String reqBody = String.format(reqTemplate, model, JSONObject.quote(content));
+            final String reqBody = String.format(reqTemplate, modelName, JSONObject.quote(content));
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
+                    .uri(URI.create(url))
                     .timeout(Duration.ofMinutes(1))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + apiKey)
@@ -145,7 +163,7 @@ public class GPTSessionInteractor implements Runnable {
         String newUserPrompt = null;
         try {
             newUserPrompt = Files.readString(Path.of(expandTilde(newUserPromptFile)));
-            appendContentAndDividers(sessionFile, newUserPrompt, divider);
+            appendContentAndDividers(sessionFile, newUserPrompt, divider, modelName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -171,7 +189,7 @@ public class GPTSessionInteractor implements Runnable {
 //                System.exit(1);
             }
             String assistantResponseTxt = extractAssistantResponse(response);
-            appendContentAndDividers(sessionFile, assistantResponseTxt, GPT_RESP_DIVIDER);
+            appendContentAndDividers(sessionFile, assistantResponseTxt, GPT_RESP_DIVIDER, modelName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
