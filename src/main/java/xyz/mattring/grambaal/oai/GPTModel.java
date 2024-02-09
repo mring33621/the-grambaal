@@ -9,9 +9,9 @@ public enum GPTModel {
     GPT_4_0613("gpt-4-0613", 8192, 202109),
     GPT_4_32K("gpt-4-32k", 32768, 202109),
     GPT_4_32K_0613("gpt-4-32k-0613", 32768, 202109),
+    GPT_3_5_TURBO_0125("gpt-3.5-turbo-0125", 16385, 202109),
+    GPT_3_5_TURBO("gpt-3.5-turbo", 4096, 202109), // Note: This entry will be updated to point to gpt-3.5-turbo-0125 on February 16th.
     GPT_3_5_TURBO_1106("gpt-3.5-turbo-1106", 16385, 202109),
-    GPT_3_5_TURBO("gpt-3.5-turbo", 4096, 202109),
-    GPT_3_5_TURBO_16K("gpt-3.5-turbo-16k", 16385, 202109),
     GPT_3_5_TURBO_INSTRUCT("gpt-3.5-turbo-instruct", 4096, 202109);
 
     private final String modelName;

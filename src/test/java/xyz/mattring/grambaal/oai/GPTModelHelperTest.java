@@ -17,8 +17,8 @@ class GPTModelHelperTest {
                 "gpt-3.5-turbo-instruct, 4096, 202109\n" +
                 "gpt-4, 8192, 202109\n" +
                 "gpt-4-0613, 8192, 202109\n" +
+                "gpt-3.5-turbo-0125, 16385, 202109\n" +
                 "gpt-3.5-turbo-1106, 16385, 202109\n" +
-                "gpt-3.5-turbo-16k, 16385, 202109\n" +
                 "gpt-4-32k, 32768, 202109\n" +
                 "gpt-4-32k-0613, 32768, 202109\n" +
                 "gpt-4-0125-preview, 128000, 202304\n" +
@@ -40,6 +40,6 @@ class GPTModelHelperTest {
 
     @org.junit.jupiter.api.Test
     void getModelForEnumName() {
-        assertEquals(GPTModel.GPT_3_5_TURBO_16K, OAI_MODEL_HELPER.getModelForEnumName("GPT_3_5_TURBO_16K").get());
+        assertEquals(GPTModel.GPT_3_5_TURBO_INSTRUCT, OAI_MODEL_HELPER.getModelForEnumName("GPT_3_5_TURBO_INSTRUCT").get());
     }
 }
