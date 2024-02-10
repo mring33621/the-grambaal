@@ -19,6 +19,7 @@ class GPTModelHelperTest {
                 "gpt-4-0613, 8192, 202109\n" +
                 "gpt-3.5-turbo-0125, 16385, 202109\n" +
                 "gpt-3.5-turbo-1106, 16385, 202109\n" +
+                "gemini-pro, 30720, 202311\n" +
                 "gpt-4-32k, 32768, 202109\n" +
                 "gpt-4-32k-0613, 32768, 202109\n" +
                 "gpt-4-0125-preview, 128000, 202304\n" +
@@ -30,7 +31,7 @@ class GPTModelHelperTest {
 
     @org.junit.jupiter.api.Test
     void getModelForTokens() {
-        assertEquals(GPTModel.GPT_4, OAI_MODEL_HELPER.getModelForTokens(5000).get());
+        assertEquals(GPTModel.GPT_4, OAI_MODEL_HELPER.getModelForMaxTokens(5000).get());
     }
 
     @org.junit.jupiter.api.Test

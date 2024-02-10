@@ -19,9 +19,9 @@ public class GPTModelHelper {
         return Collections.unmodifiableList(sortedModels);
     }
 
-    public Optional<GPTModel> getModelForTokens(int tokens) {
+    public Optional<GPTModel> getModelForMaxTokens(int maxTokens) {
         return sortedModels.stream()
-                .filter(m -> m.getMaxTokens() >= tokens)
+                .filter(m -> m.getMaxTokens() >= maxTokens)
                 .findFirst();
     }
 
@@ -35,5 +35,17 @@ public class GPTModelHelper {
         return sortedModels.stream()
                 .filter(m -> m.name().equals(enumName))
                 .findFirst();
+    }
+
+    public static Optional<APISpec> getAPISpecForModelName(String modelName) {
+        if (modelName == null) {
+            return Optional.empty();
+        } else if (modelName.startsWith("gpt-")) {
+            return Optional.of(APISpec.GPT);
+        } else if (modelName.startsWith("gemini-")) {
+            return Optional.of(APISpec.GEMINI);
+        } else {
+            return Optional.empty();
+        }
     }
 }

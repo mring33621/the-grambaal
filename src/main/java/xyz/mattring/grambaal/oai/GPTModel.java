@@ -12,7 +12,8 @@ public enum GPTModel {
     GPT_3_5_TURBO_0125("gpt-3.5-turbo-0125", 16385, 202109),
     GPT_3_5_TURBO("gpt-3.5-turbo", 4096, 202109), // Note: This entry will be updated to point to gpt-3.5-turbo-0125 on February 16th.
     GPT_3_5_TURBO_1106("gpt-3.5-turbo-1106", 16385, 202109),
-    GPT_3_5_TURBO_INSTRUCT("gpt-3.5-turbo-instruct", 4096, 202109);
+    GPT_3_5_TURBO_INSTRUCT("gpt-3.5-turbo-instruct", 4096, 202109),
+    GEM_PRO("gemini-pro", 30720, 202311);
 
     private final String modelName;
     private final int maxTokens;

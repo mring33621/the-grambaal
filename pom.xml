@@ -6,7 +6,7 @@
 
     <groupId>xyz.mattring.grambaal</groupId>
     <artifactId>the-grambaal</artifactId>
-    <version>1.9-SNAPSHOT</version>
+    <version>1.10-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

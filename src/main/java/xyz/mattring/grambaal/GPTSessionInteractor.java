@@ -1,8 +1,9 @@
 package xyz.mattring.grambaal;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
+import xyz.mattring.grambaal.oai.APISpec;
 import xyz.mattring.grambaal.oai.GPTModel;
+import xyz.mattring.grambaal.oai.GPTModelHelper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,11 +23,9 @@ import java.util.regex.Matcher;
 
 public class GPTSessionInteractor implements Runnable {
 
-    static final String API_URL = "https://api.openai.com/v1/chat/completions";
     static final String ORIG_PROMPT_DIVIDER = "<original_user_prompt>";
     static final String GPT_RESP_DIVIDER = "<assistant_response>";
     static final String USER_FOLLOWUP_DIVIDER = "<user_followup>";
-    public static final String GRAMBAAL_API_KEY = "GRAMBAAL_API_KEY";
 
     static String annotateDivider(String divider, String modelName) {
         String annotatedDivider = divider;
@@ -63,23 +62,32 @@ public class GPTSessionInteractor implements Runnable {
         }
     }
 
-    static HttpResponse<String> post(String url, String apiKey, String modelName, String content) throws IOException {
+    static HttpResponse<String> post(APISpec apiSpec, String apiKey, String modelName, String content) throws IOException {
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2);
         try (HttpClient httpClient = builder.build()) {
-            final String reqTemplate = """
-                    {
-                          "model": "%s",
-                          "messages": [{"role": "user", "content": %s}],
-                          "temperature": 0.7
-                    }
-                    """;
-            final String reqBody = String.format(reqTemplate, modelName, JSONObject.quote(content));
+            final String reqTemplate = apiSpec.getRequestTemplate();
+            String reqBody;
+            String authHdrKey;
+            String authHdrVal;
+            // TODO: would be nice if the API spec provided better parts, to avoid this if-then logic here
+            if (apiSpec == APISpec.GPT) {
+                reqBody = String.format(reqTemplate, modelName, JSONObject.quote(content));
+                authHdrKey = "Authorization";
+                authHdrVal = "Bearer " + apiKey;
+            } else if (apiSpec == APISpec.GEMINI) {
+                reqBody = String.format(reqTemplate, JSONObject.quote(content));
+                authHdrKey = "x-goog-api-key";
+                authHdrVal = apiKey;
+            } else {
+                throw new RuntimeException("Unknown API spec: " + apiSpec);
+            }
+            System.out.println("Request body:\n" + reqBody);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
+                    .uri(URI.create(apiSpec.getApiUrl()))
                     .timeout(Duration.ofMinutes(1))
                     .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + apiKey)
+                    .header(authHdrKey, authHdrVal)
                     .POST(HttpRequest.BodyPublishers.ofString(reqBody))
                     .build();
             return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -93,10 +101,8 @@ public class GPTSessionInteractor implements Runnable {
         return response.has("error");
     }
 
-    public static String extractAssistantResponse(String jsonResponse) {
-        JSONObject response = new JSONObject(jsonResponse);
-        JSONArray choices = response.getJSONArray("choices");
-        return choices.getJSONObject(0).getJSONObject("message").getString("content");
+    public static String extractAssistantResponse(String jsonResponse, APISpec apiSpec) {
+        return apiSpec.getJsonToChatResponseParser().apply(jsonResponse);
     }
 
     static String fixSessionFileName(String sessionName) {
@@ -175,20 +181,23 @@ public class GPTSessionInteractor implements Runnable {
             throw new RuntimeException(e);
         }
 
-        String apiKey = System.getenv(GRAMBAAL_API_KEY);
+        final APISpec apiSpec = GPTModelHelper.getAPISpecForModelName(modelName).orElseThrow();
+
+        final String envVar = apiSpec.getApiKeyEnvVar();
+        final String apiKey = System.getenv(envVar);
         if (apiKey == null) {
-            throw new RuntimeException("GRAMBAAL_API_KEY environment variable not set");
+            throw new RuntimeException(envVar + " environment variable not set");
         }
 
         String response = null;
         try {
-            response = post(API_URL, apiKey, modelName, fullSessionConvo).body();
+            response = post(apiSpec, apiKey, modelName, fullSessionConvo).body();
             boolean apiError = hasError(response);
             if (apiError) {
                 System.err.println("API error: \n" + response);
 //                System.exit(1);
             }
-            String assistantResponseTxt = extractAssistantResponse(response);
+            String assistantResponseTxt = extractAssistantResponse(response, apiSpec);
             appendContentAndDividers(sessionFile, assistantResponseTxt, GPT_RESP_DIVIDER, modelName);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -197,8 +206,9 @@ public class GPTSessionInteractor implements Runnable {
 
     public static void main(String[] args) {
         String session = "session-" + args[0];
-        String newUserPromptFile = args[1];
-        GPTSessionInteractor GPTSessionInteractor = new GPTSessionInteractor(session, newUserPromptFile);
+        String modelName = args[1];
+        String newUserPromptFile = args[2];
+        GPTSessionInteractor GPTSessionInteractor = new GPTSessionInteractor(session, newUserPromptFile, modelName);
         GPTSessionInteractor.run();
 //        System.exit(0);
     }
