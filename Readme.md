@@ -25,6 +25,3 @@ Ok, it's really just a hacky Java program for text file-based interaction with t
 2. I use simple HTML-inspired delimiters in the session file, which help the AI understand the context and history of the ongoing convo.
 3. I actually used this program to work with the AI to write this program!
 4. There's an example session file in src/test/resources/session-example1.txt, if you'd like to see one.
-
-### TODOs:
-1. Selectable models (currently hard-coded to 'gpt-3.5-turbo')
