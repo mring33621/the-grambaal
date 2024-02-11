@@ -44,6 +44,8 @@ public class GPTModelHelper {
             return Optional.of(APISpec.GPT);
         } else if (modelName.startsWith("gemini-")) {
             return Optional.of(APISpec.GEMINI);
+        }  else if (modelName.contains("/")) {
+            return Optional.of(APISpec.DINFRA);
         } else {
             return Optional.empty();
         }

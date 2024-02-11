@@ -71,7 +71,8 @@ public class GPTSessionInteractor implements Runnable {
             String authHdrKey;
             String authHdrVal;
             // TODO: would be nice if the API spec provided better parts, to avoid this if-then logic here
-            if (apiSpec == APISpec.GPT) {
+            if (apiSpec == APISpec.GPT || apiSpec == APISpec.DINFRA) {
+                // NOTE: DeepInfra provides an OpenAI API-compatible endpoint
                 reqBody = String.format(reqTemplate, modelName, JSONObject.quote(content));
                 authHdrKey = "Authorization";
                 authHdrVal = "Bearer " + apiKey;
@@ -85,7 +86,7 @@ public class GPTSessionInteractor implements Runnable {
             System.out.println("Request body:\n" + reqBody);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiSpec.getApiUrl()))
-                    .timeout(Duration.ofMinutes(1))
+                    .timeout(Duration.ofMinutes(2))
                     .header("Content-Type", "application/json")
                     .header(authHdrKey, authHdrVal)
                     .POST(HttpRequest.BodyPublishers.ofString(reqBody))

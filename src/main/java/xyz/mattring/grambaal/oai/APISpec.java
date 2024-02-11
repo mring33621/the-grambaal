@@ -45,6 +45,26 @@ public enum APISpec {
                         .getJSONObject(0)
                         .getString("text");
             }
+    ),
+    DINFRA(
+            "DINFRA_API_KEY",
+            "https://api.deepinfra.com/v1/openai/chat/completions",
+            """
+                    {
+                        "model": "%s",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": %s
+                            }
+                        ]
+                    }
+                    """,
+            jsonStrResp -> {
+                final JSONObject respObj = new JSONObject(jsonStrResp);
+                final JSONArray choices = respObj.getJSONArray("choices");
+                return choices.getJSONObject(0).getJSONObject("message").getString("content");
+            }
     );
 
     private final String apiKeyEnvVar;
