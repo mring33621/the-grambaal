@@ -2,8 +2,11 @@ package xyz.mattring.grambaal;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GPTSessionInteractorTest {
 
@@ -21,7 +24,7 @@ class GPTSessionInteractorTest {
 
     @Test
     void expandTilde() {
-        String result = GPTSessionInteractor.expandTilde("~/a");
+        String result = GPTSessionInteractor.expandTildeAndNormalizePath("~/a");
         System.out.println(result);
         assertTrue(result.contains("home") || result.contains("Users"));
     }
@@ -30,5 +33,21 @@ class GPTSessionInteractorTest {
     void getEndDivider() {
         assertEquals("</fart>", GPTSessionInteractor.getEndDivider("<fart>"));
         assertEquals("</original_user_prompt>", GPTSessionInteractor.getEndDivider(GPTSessionInteractor.ORIG_PROMPT_DIVIDER));
+    }
+
+    @Test
+    void getExistingSessions() {
+        Path testDirPath = null;
+        try {
+            testDirPath = Files.createTempDirectory("grambaal-unittest");
+            testDirPath.toFile().deleteOnExit();
+            Files.createFile(testDirPath.resolve("session-test1.txt"));
+            Files.createFile(testDirPath.resolve("session-test2.txt"));
+            List<String> result = GPTSessionInteractor.getExistingSessions(testDirPath.toString());
+            System.out.println(result);
+            assertEquals("[test1, test2]", result.toString());
+        } catch (Exception e) {
+            fail(e);
+        }
     }
 }

@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
@@ -26,6 +27,7 @@ public class GPTSessionInteractor implements Runnable {
     static final String ORIG_PROMPT_DIVIDER = "<original_user_prompt>";
     static final String GPT_RESP_DIVIDER = "<assistant_response>";
     static final String USER_FOLLOWUP_DIVIDER = "<user_followup>";
+    public static final String SESSION_BASEDIR = "~/grambaal/sessions";
 
     static String annotateDivider(String divider, String modelName) {
         String annotatedDivider = divider;
@@ -41,7 +43,7 @@ public class GPTSessionInteractor implements Runnable {
         return annotatedDivider;
     }
 
-    static String expandTilde(String path) {
+    static String expandTildeAndNormalizePath(String path) {
         String expandedPath = path.replaceFirst("^~", Matcher.quoteReplacement(System.getProperty("user.home")));
         String normalizedPath = Path.of(expandedPath).normalize().toString();
         return normalizedPath;
@@ -60,6 +62,17 @@ public class GPTSessionInteractor implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<String> getExistingSessions(String sessionBaseDir) {
+        String sessionPath = expandTildeAndNormalizePath(sessionBaseDir);
+        File sessionDir = new File(sessionPath);
+        String[] sessionFiles = sessionDir.list();
+        return List.of(sessionFiles).stream()
+                .filter(f -> f.startsWith("session-"))
+                .map(f -> f.replaceFirst("session-", ""))
+                .map(f -> f.replaceFirst("\\.txt$", ""))
+                .toList();
     }
 
     static HttpResponse<String> post(APISpec apiSpec, String apiKey, String modelName, String content) throws IOException {
@@ -139,7 +152,7 @@ public class GPTSessionInteractor implements Runnable {
             return Optional.empty();
         }
         String sessionName = fixSessionFileName(session);
-        String sessionPath = expandTilde("~/grambaal/sessions");
+        String sessionPath = expandTildeAndNormalizePath(SESSION_BASEDIR);
         File sessionFile =
                 Path.of(sessionPath, sessionName + ".txt").toFile();
         String fullSessionConvo = null;
@@ -153,7 +166,7 @@ public class GPTSessionInteractor implements Runnable {
 
     @Override
     public void run() {
-        String sessionPath = expandTilde("~/grambaal/sessions");
+        String sessionPath = expandTildeAndNormalizePath(SESSION_BASEDIR);
         File sessionFile =
                 Path.of(sessionPath, session + ".txt").toFile();
         boolean existingSession = sessionFile.exists();
@@ -169,7 +182,7 @@ public class GPTSessionInteractor implements Runnable {
         // read new user prompt from newUserPromptFile
         String newUserPrompt = null;
         try {
-            newUserPrompt = Files.readString(Path.of(expandTilde(newUserPromptFile)));
+            newUserPrompt = Files.readString(Path.of(expandTildeAndNormalizePath(newUserPromptFile)));
             appendContentAndDividers(sessionFile, newUserPrompt, divider, modelName);
         } catch (IOException e) {
             throw new RuntimeException(e);
