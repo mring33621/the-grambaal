@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GPTModelHelperTest {
 
-    static final GPTModelHelper OAI_MODEL_HELPER = new GPTModelHelper();
+    static final GPTModelHelper GPT_MODEL_HELPER = new GPTModelHelper();
 
     @org.junit.jupiter.api.Test
     void modelEnumToString() {
-        String observed = OAI_MODEL_HELPER.getSortedModels().stream()
+        String observed = GPT_MODEL_HELPER.getSortedModels().stream()
                 .map(GPTModel::toString)
                 .collect(Collectors.joining("\n"));
         String expected = "01-ai/Yi-34B-Chat, 4000, 202307\n" +
@@ -20,6 +20,8 @@ class GPTModelHelperTest {
                 "gpt-4-0613, 8192, 202109\n" +
                 "gpt-3.5-turbo-0125, 16385, 202109\n" +
                 "gpt-3.5-turbo-1106, 16385, 202109\n" +
+                "gemini-pro, 30720, 202402\n" +
+                "gemini-1.0-pro-latest, 30720, 202402\n" +
                 "gpt-4-32k, 32768, 202109\n" +
                 "gpt-4-32k-0613, 32768, 202109\n" +
                 "cognitivecomputations/dolphin-2.6-mixtral-8x7b, 32768, 202307\n" +
@@ -33,16 +35,16 @@ class GPTModelHelperTest {
 
     @org.junit.jupiter.api.Test
     void getModelForTokens() {
-        assertEquals(GPTModel.GPT_4, OAI_MODEL_HELPER.getModelForMaxTokens(5000).get());
+        assertEquals(GPTModel.GPT_4, GPT_MODEL_HELPER.getModelForMaxTokens(5000).get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForModelName() {
-        assertEquals(GPTModel.GPT_3_5_TURBO_1106, OAI_MODEL_HELPER.getModelForModelName("gpt-3.5-turbo-1106").get());
+        assertEquals(GPTModel.GPT_3_5_TURBO_1106, GPT_MODEL_HELPER.getModelForModelName("gpt-3.5-turbo-1106").get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForEnumName() {
-        assertEquals(GPTModel.GPT_3_5_TURBO_INSTRUCT, OAI_MODEL_HELPER.getModelForEnumName("GPT_3_5_TURBO_INSTRUCT").get());
+        assertEquals(GPTModel.GPT_3_5_TURBO_INSTRUCT, GPT_MODEL_HELPER.getModelForEnumName("GPT_3_5_TURBO_INSTRUCT").get());
     }
 }
