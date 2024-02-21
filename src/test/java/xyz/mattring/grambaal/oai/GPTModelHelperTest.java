@@ -15,20 +15,12 @@ class GPTModelHelperTest {
                 .collect(Collectors.joining("\n"));
         String expected = "01-ai/Yi-34B-Chat, 4000, 202307\n" +
                 "gpt-3.5-turbo, 4096, 202109\n" +
-                "gpt-3.5-turbo-instruct, 4096, 202109\n" +
                 "gpt-4, 8192, 202109\n" +
-                "gpt-4-0613, 8192, 202109\n" +
-                "gpt-3.5-turbo-0125, 16385, 202109\n" +
-                "gpt-3.5-turbo-1106, 16385, 202109\n" +
                 "gemini-pro, 30720, 202402\n" +
                 "gemini-1.0-pro-latest, 30720, 202402\n" +
-                "gpt-4-32k, 32768, 202109\n" +
-                "gpt-4-32k-0613, 32768, 202109\n" +
                 "cognitivecomputations/dolphin-2.6-mixtral-8x7b, 32768, 202307\n" +
                 "codellama/CodeLlama-34b-Instruct-hf, 100000, 202307\n" +
-                "gpt-4-0125-preview, 128000, 202304\n" +
                 "gpt-4-turbo-preview, 128000, 202304\n" +
-                "gpt-4-1106-preview, 128000, 202304\n" +
                 "gpt-4-vision-preview, 128000, 202304";
         assertEquals(expected, observed);
     }
@@ -40,11 +32,11 @@ class GPTModelHelperTest {
 
     @org.junit.jupiter.api.Test
     void getModelForModelName() {
-        assertEquals(GPTModel.GPT_3_5_TURBO_1106, GPT_MODEL_HELPER.getModelForModelName("gpt-3.5-turbo-1106").get());
+        assertEquals(GPTModel.GPT_4_TURBO_PREVIEW, GPT_MODEL_HELPER.getModelForModelName("gpt-4-turbo-preview").get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForEnumName() {
-        assertEquals(GPTModel.GPT_3_5_TURBO_INSTRUCT, GPT_MODEL_HELPER.getModelForEnumName("GPT_3_5_TURBO_INSTRUCT").get());
+        assertEquals(GPTModel.GEM_1_0_PRO_LATEST, GPT_MODEL_HELPER.getModelForEnumName("GEM_1_0_PRO_LATEST").get());
     }
 }

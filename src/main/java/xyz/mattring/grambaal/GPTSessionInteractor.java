@@ -5,10 +5,7 @@ import xyz.mattring.grambaal.oai.APISpec;
 import xyz.mattring.grambaal.oai.GPTModel;
 import xyz.mattring.grambaal.oai.GPTModelHelper;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -60,7 +57,7 @@ public class GPTSessionInteractor implements Runnable {
             pw.println(getEndDivider(divider));
             pw.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -164,6 +161,22 @@ public class GPTSessionInteractor implements Runnable {
         return Optional.ofNullable(fullSessionConvo);
     }
 
+    public static void saveConvoTextForSession(String session, String convoText) {
+        if (session == null) {
+            return;
+        }
+        String sessionName = fixSessionFileName(session);
+        String sessionPath = expandTildeAndNormalizePath(SESSION_BASEDIR);
+        File sessionFile =
+                Path.of(sessionPath, sessionName + ".txt").toFile();
+        try (PrintWriter pw = new PrintWriter(new FileWriter(sessionFile, false))) {
+            pw.println(convoText);
+            pw.flush();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     @Override
     public void run() {
         String sessionPath = expandTildeAndNormalizePath(SESSION_BASEDIR);
@@ -185,14 +198,14 @@ public class GPTSessionInteractor implements Runnable {
             newUserPrompt = Files.readString(Path.of(expandTildeAndNormalizePath(newUserPromptFile)));
             appendContentAndDividers(sessionFile, newUserPrompt, divider, modelName);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
 
         String fullSessionConvo = null;
         try {
             fullSessionConvo = Files.readString(sessionFile.toPath());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
 
         final APISpec apiSpec = GPTModelHelper.getAPISpecForModelName(modelName).orElseThrow();
@@ -214,7 +227,7 @@ public class GPTSessionInteractor implements Runnable {
             String assistantResponseTxt = extractAssistantResponse(response, apiSpec);
             appendContentAndDividers(sessionFile, assistantResponseTxt, GPT_RESP_DIVIDER, modelName);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
