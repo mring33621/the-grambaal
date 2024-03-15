@@ -15,9 +15,11 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
+import java.util.stream.Stream;
 
 public class GPTSessionInteractor implements Runnable {
 
@@ -64,8 +66,11 @@ public class GPTSessionInteractor implements Runnable {
     public static List<String> getExistingSessions(String sessionBaseDir) {
         String sessionPath = expandTildeAndNormalizePath(sessionBaseDir);
         File sessionDir = new File(sessionPath);
-        String[] sessionFiles = sessionDir.list();
-        return List.of(sessionFiles).stream()
+        File[] sessionFiles = sessionDir.listFiles();
+        // Sort the files by last modified date in descending order
+        Arrays.sort(sessionFiles, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+        return Stream.of(sessionFiles)
+                .map(File::getName)
                 .filter(f -> f.startsWith("session-"))
                 .map(f -> f.replaceFirst("session-", ""))
                 .map(f -> f.replaceFirst("\\.txt$", ""))

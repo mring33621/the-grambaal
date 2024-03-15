@@ -9,14 +9,17 @@ public class GPTModelHelper {
 
     final List<GPTModel> sortedModels;
 
-    public GPTModelHelper() {
+    public GPTModelHelper(boolean excludeModelsWithoutApiKeys) {
         List<GPTModel> models = new ArrayList<>(List.of(GPTModel.values()));
+        if (excludeModelsWithoutApiKeys) {
+            models.removeIf(m -> !isApiKeyCurrentlySet(m.getModelName()));
+        }
         models.sort((o1, o2) -> o1.getMaxTokens() - o2.getMaxTokens()); // by maxTokens ascending
         sortedModels = Collections.unmodifiableList(models);
     }
 
     public List<GPTModel> getSortedModels() {
-        return Collections.unmodifiableList(sortedModels);
+        return sortedModels;
     }
 
     public Optional<GPTModel> getModelForMaxTokens(int maxTokens) {
@@ -44,10 +47,15 @@ public class GPTModelHelper {
             return Optional.of(APISpec.GPT);
         } else if (modelName.startsWith("gemini-")) {
             return Optional.of(APISpec.GEMINI);
-        }  else if (modelName.contains("/")) {
+        } else if (modelName.contains("/")) {
             return Optional.of(APISpec.DINFRA);
         } else {
             return Optional.empty();
         }
+    }
+
+    public static boolean isApiKeyCurrentlySet(String modelName) {
+        Optional<APISpec> apiSpec = getAPISpecForModelName(modelName);
+        return apiSpec.isPresent() && System.getenv(apiSpec.get().getApiKeyEnvVar()) != null;
     }
 }

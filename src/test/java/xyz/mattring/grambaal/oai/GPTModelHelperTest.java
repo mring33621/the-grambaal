@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GPTModelHelperTest {
 
-    static final GPTModelHelper GPT_MODEL_HELPER = new GPTModelHelper();
+    static final GPTModelHelper GPT_MODEL_HELPER = new GPTModelHelper(false);
 
     @org.junit.jupiter.api.Test
     void modelEnumToString() {
