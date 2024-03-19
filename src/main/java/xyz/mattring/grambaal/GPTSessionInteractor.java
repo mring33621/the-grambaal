@@ -13,43 +13,21 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
+import static xyz.mattring.grambaal.convo.ConvoUtils.*;
+
 public class GPTSessionInteractor implements Runnable {
 
-    static final String ORIG_PROMPT_DIVIDER = "<original_user_prompt>";
-    static final String GPT_RESP_DIVIDER = "<assistant_response>";
-    static final String USER_FOLLOWUP_DIVIDER = "<user_followup>";
     public static final String SESSION_BASEDIR = "~/grambaal/sessions";
-
-    static String annotateDivider(String divider, String modelName) {
-        String annotatedDivider = divider;
-        if (GPT_RESP_DIVIDER.equals(divider)) {
-            String modelAnno = String.format(" model=\"%s\"", modelName);
-            annotatedDivider = annotatedDivider.replace(">", modelAnno + ">");
-        }
-        final LocalDateTime now = LocalDateTime.now();
-        // Format the LocalDateTime object using the ISO 8601 date format
-        final DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        final String formattedDateTime = formatter.format(now);
-        annotatedDivider = annotatedDivider.replace(">", " timestamp=\"" + formattedDateTime + "\">");
-        return annotatedDivider;
-    }
 
     static String expandTildeAndNormalizePath(String path) {
         String expandedPath = path.replaceFirst("^~", Matcher.quoteReplacement(System.getProperty("user.home")));
-        String normalizedPath = Path.of(expandedPath).normalize().toString();
-        return normalizedPath;
-    }
-
-    static String getEndDivider(String divider) {
-        return divider.replace("<", "</");
+        return Path.of(expandedPath).normalize().toString();
     }
 
     static void appendContentAndDividers(File sessionFile, String content, String divider, String model) {
