@@ -1,15 +1,14 @@
 package xyz.mattring.grambaal.oai;
 
 public enum GPTModel {
-    GPT_4_TURBO_PREVIEW("gpt-4-turbo-preview", 128000, 202304),
-    GPT_4_VISION_PREVIEW("gpt-4-vision-preview", 128000, 202304),
-    GPT_4("gpt-4", 8192, 202109),
-    GPT_3_5_TURBO("gpt-3.5-turbo", 4096, 202109),
-    GEM_PRO("gemini-pro", 30720, 202402),
-    GEM_1_0_PRO_LATEST("gemini-1.0-pro-latest", 30720, 202402),
-    DINFRA_DOLPHIN_2_6("cognitivecomputations/dolphin-2.6-mixtral-8x7b", 32768, 202307),
-    DINFRA_YI_34B("01-ai/Yi-34B-Chat", 4000, 202307),
-    DINFRA_CODE_LLAMA_34B("codellama/CodeLlama-34b-Instruct-hf", 100000, 202307);
+    GPT_4_TURBO("gpt-4-turbo", 128000, 202312),
+    GPT_4o("gpt-4o", 128000, 202310),
+    GPT_3_5_TURBO("gpt-3.5-turbo", 16385, 202109),
+    GEM_1_5_PRO_LATEST("gemini-1.5-pro-latest", 1048576, 202303),
+    GEM_1_5_FLASH_LATEST("gemini-1.5-flash-latest", 1048576, 202303),
+    GEM_1_0_PRO_LATEST("gemini-1.0-pro-latest", 30720, 202303),
+    DINFRA_DOLPHIN_2_6("cognitivecomputations/dolphin-2.6-mixtral-8x7b", 32000, 202307),
+    DINFRA_LLAMA_3_8B("meta-llama/Meta-Llama-3-8B-Instruct", 8000, 202303);
 
     private final String modelName;
     private final int maxTokens;

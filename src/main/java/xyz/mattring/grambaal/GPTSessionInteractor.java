@@ -114,7 +114,7 @@ public class GPTSessionInteractor implements Runnable {
     private final String modelName;
 
     public GPTSessionInteractor(String session, String newUserPromptFile) {
-        this(session, newUserPromptFile, GPTModel.GPT_4);
+        this(session, newUserPromptFile, GPTModel.GPT_3_5_TURBO);
     }
 
     public GPTSessionInteractor(String session, String newUserPromptFile, String modelName) {

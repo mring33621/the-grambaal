@@ -13,30 +13,29 @@ class GPTModelHelperTest {
         String observed = GPT_MODEL_HELPER.getSortedModels().stream()
                 .map(GPTModel::toString)
                 .collect(Collectors.joining("\n"));
-        String expected = "01-ai/Yi-34B-Chat, 4000, 202307\n" +
-                "gpt-3.5-turbo, 4096, 202109\n" +
-                "gpt-4, 8192, 202109\n" +
-                "gemini-pro, 30720, 202402\n" +
-                "gemini-1.0-pro-latest, 30720, 202402\n" +
-                "cognitivecomputations/dolphin-2.6-mixtral-8x7b, 32768, 202307\n" +
-                "codellama/CodeLlama-34b-Instruct-hf, 100000, 202307\n" +
-                "gpt-4-turbo-preview, 128000, 202304\n" +
-                "gpt-4-vision-preview, 128000, 202304";
+        String expected = "meta-llama/Meta-Llama-3-8B-Instruct, 8000, 202303\n" +
+                "gpt-3.5-turbo, 16385, 202109\n" +
+                "gemini-1.0-pro-latest, 30720, 202303\n" +
+                "cognitivecomputations/dolphin-2.6-mixtral-8x7b, 32000, 202307\n" +
+                "gpt-4-turbo, 128000, 202312\n" +
+                "gpt-4o, 128000, 202310\n" +
+                "gemini-1.5-pro-latest, 1048576, 202303\n" +
+                "gemini-1.5-flash-latest, 1048576, 202303";
         assertEquals(expected, observed);
     }
 
     @org.junit.jupiter.api.Test
     void getModelForTokens() {
-        assertEquals(GPTModel.GPT_4, GPT_MODEL_HELPER.getModelForMaxTokens(5000).get());
+        assertEquals(GPTModel.GPT_3_5_TURBO, GPT_MODEL_HELPER.getModelForMaxTokens(16000).get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForModelName() {
-        assertEquals(GPTModel.GPT_4_TURBO_PREVIEW, GPT_MODEL_HELPER.getModelForModelName("gpt-4-turbo-preview").get());
+        assertEquals(GPTModel.GEM_1_5_FLASH_LATEST, GPT_MODEL_HELPER.getModelForModelName("gemini-1.5-flash-latest").get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForEnumName() {
-        assertEquals(GPTModel.GEM_1_0_PRO_LATEST, GPT_MODEL_HELPER.getModelForEnumName("GEM_1_0_PRO_LATEST").get());
+        assertEquals(GPTModel.DINFRA_LLAMA_3_8B, GPT_MODEL_HELPER.getModelForEnumName("DINFRA_LLAMA_3_8B").get());
     }
 }
