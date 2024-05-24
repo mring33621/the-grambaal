@@ -73,6 +73,10 @@ public class GPTSessionInteractor implements Runnable {
                 reqBody = String.format(reqTemplate, JSONObject.quote(content));
                 authHdrKey = "x-goog-api-key";
                 authHdrVal = apiKey;
+            } else if (apiSpec == APISpec.CLAUDE) {
+                reqBody = String.format(reqTemplate, JSONObject.quote(content));
+                authHdrKey = "x-api-key";
+                authHdrVal = apiKey;
             } else {
                 throw new RuntimeException("Unknown API spec: " + apiSpec);
             }

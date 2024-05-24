@@ -8,7 +8,9 @@ public enum GPTModel {
     GEM_1_5_FLASH_LATEST("gemini-1.5-flash-latest", 1048576, 202303),
     GEM_1_0_PRO_LATEST("gemini-1.0-pro-latest", 30720, 202303),
     DINFRA_DOLPHIN_2_6("cognitivecomputations/dolphin-2.6-mixtral-8x7b", 32000, 202307),
-    DINFRA_LLAMA_3_8B("meta-llama/Meta-Llama-3-8B-Instruct", 8000, 202303);
+    DINFRA_LLAMA_3_8B("meta-llama/Meta-Llama-3-8B-Instruct", 8000, 202303),
+    CLAUDE_3_HAIKU("claude-3-haiku-20240307", 200000, 202308),
+    CLAUDE_3_SONNET("claude-3-sonnet-20240229", 200000, 202308);
 
     private final String modelName;
     private final int maxTokens;

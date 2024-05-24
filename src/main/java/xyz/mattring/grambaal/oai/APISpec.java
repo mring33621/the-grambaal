@@ -65,6 +65,26 @@ public enum APISpec {
                 final JSONArray choices = respObj.getJSONArray("choices");
                 return choices.getJSONObject(0).getJSONObject("message").getString("content");
             }
+    ),
+    CLAUDE(
+            "CLAUDE_API_KEY",
+            "https://api.anthropic.com/v1/messages",
+            """
+                    {
+                        "model": "%s",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": %s
+                            }
+                        ]
+                    }
+                    """,
+            jsonStrResp -> {
+                final JSONObject respObj = new JSONObject(jsonStrResp);
+                final JSONArray choices = respObj.getJSONArray("choices");
+                return choices.getJSONObject(0).getJSONObject("message").getString("content");
+            }
     );
 
     private final String apiKeyEnvVar;
