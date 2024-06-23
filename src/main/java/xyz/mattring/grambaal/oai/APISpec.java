@@ -12,6 +12,7 @@ public enum APISpec {
             """
                     {
                         "model": "%s",
+                        "max_tokens": 4096,
                         "messages": [
                             {
                                 "role": "user",
@@ -52,6 +53,7 @@ public enum APISpec {
             """
                     {
                         "model": "%s",
+                        "max_tokens": 4096,
                         "messages": [
                             {
                                 "role": "user",
@@ -72,6 +74,7 @@ public enum APISpec {
             """
                     {
                         "model": "%s",
+                        "max_tokens": 4096,
                         "messages": [
                             {
                                 "role": "user",
