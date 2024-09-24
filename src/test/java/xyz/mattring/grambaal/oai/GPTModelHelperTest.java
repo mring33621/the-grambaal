@@ -15,35 +15,32 @@ class GPTModelHelperTest {
                 .collect(Collectors.joining("\n"));
 //        System.out.println(observed);
         String expected =
-                "nvidia/Nemotron-4-340B-Instruct, 4000, 202306\n" +
-                        "gpt-3.5-turbo, 16385, 202109\n" +
-                        "gemini-1.0-pro-latest, 30720, 202303\n" +
-                        "Qwen/Qwen2-72B-Instruct, 32000, 202307\n" +
-                        "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202303\n" +
+                "Qwen/Qwen2.5-Coder-7B, 32000, 202401\n" +
+                        "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
                         "gpt-4-turbo, 128000, 202312\n" +
-                        "gpt-4o, 128000, 202310\n" +
-                        "gpt-4o-mini, 128000, 202310\n" +
-                        "meta-llama/Meta-Llama-3.1-70B-Instruct, 128000, 202303\n" +
+                        "o1-preview, 128000, 202310\n" +
+                        "o1-mini, 128000, 202310\n" +
+                        "mistralai/Mistral-Nemo-Instruct-2407, 128000, 202401\n" +
                         "claude-3-haiku-20240307, 200000, 202308\n" +
                         "claude-3-opus-20240229, 200000, 202308\n" +
                         "claude-3-5-sonnet-20240620, 200000, 202404\n" +
-                        "gemini-1.5-pro-latest, 1048576, 202303\n" +
-                        "gemini-1.5-flash-latest, 1048576, 202303";
+                        "gemini-1.5-pro, 1048576, 202303\n" +
+                        "gemini-1.5-flash, 1048576, 202303";
         assertEquals(expected, observed);
     }
 
     @org.junit.jupiter.api.Test
     void getModelForTokens() {
-        assertEquals(GPTModel.GPT_3_5_TURBO, GPT_MODEL_HELPER.getModelForMaxTokens(16000).get());
+        assertEquals(GPTModel.GPT_4_TURBO, GPT_MODEL_HELPER.getModelForMaxTokens(128000).get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForModelName() {
-        assertEquals(GPTModel.GEM_1_5_FLASH_LATEST, GPT_MODEL_HELPER.getModelForModelName("gemini-1.5-flash-latest").get());
+        assertEquals(GPTModel.GEM_1_5_FLASH_LATEST, GPT_MODEL_HELPER.getModelForModelName("gemini-1.5-flash").get());
     }
 
     @org.junit.jupiter.api.Test
     void getModelForEnumName() {
-        assertEquals(GPTModel.DINFRA_LLAMA_3_1_70B, GPT_MODEL_HELPER.getModelForEnumName("DINFRA_LLAMA_3_1_70B").get());
+        assertEquals(GPTModel.CLAUDE_3_5_SONNET, GPT_MODEL_HELPER.getModelForEnumName("CLAUDE_3_5_SONNET").get());
     }
 }
