@@ -15,17 +15,16 @@ class GPTModelHelperTest {
                 .collect(Collectors.joining("\n"));
 //        System.out.println(observed);
         String expected =
-                "Qwen/Qwen2.5-Coder-7B, 32000, 202401\n" +
+                "Qwen/Qwen2.5-Coder-32B-Instruct, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
                         "gpt-4-turbo, 128000, 202312\n" +
                         "o1-preview, 128000, 202310\n" +
                         "o1-mini, 128000, 202310\n" +
-                        "mistralai/Mistral-Nemo-Instruct-2407, 128000, 202401\n" +
-                        "claude-3-haiku-20240307, 200000, 202308\n" +
-                        "claude-3-opus-20240229, 200000, 202308\n" +
-                        "claude-3-5-sonnet-20240620, 200000, 202404\n" +
-                        "gemini-1.5-pro, 1048576, 202303\n" +
-                        "gemini-1.5-flash, 1048576, 202303";
+                        "nvidia/Llama-3.1-Nemotron-70B-Instruct, 128000, 202401\n" +
+                        "claude-3-5-haiku-20241022, 200000, 202407\n" +
+                        "claude-3-5-sonnet-20241022, 200000, 202404\n" +
+                        "gemini-1.5-pro, 1048576, 202409\n" +
+                        "gemini-1.5-flash, 1048576, 202409";
         assertEquals(expected, observed);
     }
 
