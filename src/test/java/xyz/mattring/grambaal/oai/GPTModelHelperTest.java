@@ -15,9 +15,12 @@ class GPTModelHelperTest {
                 .collect(Collectors.joining("\n"));
 //        System.out.println(observed);
         String expected =
-                "Qwen/Qwen2.5-Coder-32B-Instruct, 32000, 202401\n" +
+                "Qwen/QwQ-32B-Preview, 32000, 202401\n" +
+                        "Qwen/Qwen2.5-Coder-32B-Instruct, 32000, 202401\n" +
+                        "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
-                        "gpt-4-turbo, 128000, 202312\n" +
+                        "deepseek-ai/DeepSeek-V2.5, 65536, 202401\n" +
+                        "chatgpt-4o-latest, 128000, 202310\n" +
                         "o1-preview, 128000, 202310\n" +
                         "o1-mini, 128000, 202310\n" +
                         "nvidia/Llama-3.1-Nemotron-70B-Instruct, 128000, 202401\n" +
@@ -30,7 +33,7 @@ class GPTModelHelperTest {
 
     @org.junit.jupiter.api.Test
     void getModelForTokens() {
-        assertEquals(GPTModel.GPT_4_TURBO, GPT_MODEL_HELPER.getModelForMaxTokens(128000).get());
+        assertEquals(GPTModel.GPT_4o, GPT_MODEL_HELPER.getModelForMaxTokens(128000).get());
     }
 
     @org.junit.jupiter.api.Test

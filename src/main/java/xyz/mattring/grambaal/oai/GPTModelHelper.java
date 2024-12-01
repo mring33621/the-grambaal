@@ -41,7 +41,6 @@ public class GPTModelHelper {
     }
 
     // TODO: add a unit test for getAPISpecForModelName()
-    // TODO: o1 models are throwing 500 in the UI, when used
     public static Optional<APISpec> getAPISpecForModelName(String modelName) {
         if (modelName == null) {
             return Optional.empty();
@@ -50,7 +49,7 @@ public class GPTModelHelper {
         } else if (modelName.startsWith("gemini-")) {
             return Optional.of(APISpec.GEMINI);
         } else if (modelName.startsWith("claude-")) {
-            return Optional.of(APISpec.GEMINI);
+            return Optional.of(APISpec.CLAUDE);
         } else if (modelName.contains("/")) {
             return Optional.of(APISpec.DINFRA);
         } else {

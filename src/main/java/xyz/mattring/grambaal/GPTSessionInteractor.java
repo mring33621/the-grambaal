@@ -13,9 +13,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
@@ -59,35 +57,42 @@ public class GPTSessionInteractor implements Runnable {
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2);
         try (HttpClient httpClient = builder.build()) {
-            final String reqTemplate = apiSpec.getRequestTemplate();
-            String reqBody;
             String authHdrKey;
             String authHdrVal;
+            Map<String, String> extraHeaders = new HashMap<>();
             // TODO: would be nice if the API spec provided better parts, to avoid this if-then logic here
             if (apiSpec == APISpec.GPT || apiSpec == APISpec.DINFRA) {
                 // NOTE: DeepInfra provides an OpenAI API-compatible endpoint
-                reqBody = String.format(reqTemplate, modelName, JSONObject.quote(content));
                 authHdrKey = "Authorization";
                 authHdrVal = "Bearer " + apiKey;
             } else if (apiSpec == APISpec.GEMINI) {
-                reqBody = String.format(reqTemplate, JSONObject.quote(content));
                 authHdrKey = "x-goog-api-key";
                 authHdrVal = apiKey;
             } else if (apiSpec == APISpec.CLAUDE) {
-                reqBody = String.format(reqTemplate, JSONObject.quote(content));
                 authHdrKey = "x-api-key";
                 authHdrVal = apiKey;
+                extraHeaders.put("anthropic-version", "2023-06-01");
             } else {
                 throw new RuntimeException("Unknown API spec: " + apiSpec);
             }
-            System.out.println("Request body:\n" + reqBody);
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiSpec.getApiUrl()))
-                    .timeout(Duration.ofMinutes(2))
+            final String reqTemplate = apiSpec.getRequestTemplate();
+            System.out.println("reqTemplate:\n" + reqTemplate);
+            final String reqBody = reqTemplate
+                    .replace("$modelName", modelName)
+                    .replace("$content", JSONObject.quote(content));
+            System.out.println("reqBody:\n" + reqBody);
+            final String reqUrl = apiSpec.getApiUrl().replace("$modelName", modelName);
+            System.out.println("reqUrl:\n" + reqUrl);
+            HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
+                    .uri(URI.create(reqUrl))
+                    .timeout(Duration.ofSeconds(150L))
                     .header("Content-Type", "application/json")
                     .header(authHdrKey, authHdrVal)
-                    .POST(HttpRequest.BodyPublishers.ofString(reqBody))
-                    .build();
+                    .POST(HttpRequest.BodyPublishers.ofString(reqBody));
+            for (Map.Entry<String, String> stringStringEntry : extraHeaders.entrySet()) {
+                reqBuilder = reqBuilder.header(stringStringEntry.getKey(), stringStringEntry.getValue());
+            }
+            final HttpRequest request = reqBuilder.build();
             return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

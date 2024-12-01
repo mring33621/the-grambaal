@@ -11,12 +11,12 @@ public enum APISpec {
             "https://api.openai.com/v1/chat/completions",
             """
                     {
-                        "model": "%s",
-                        "max_tokens": 4096,
+                        "model": "$modelName",
+                        "max_completion_tokens": 8192,
                         "messages": [
                             {
                                 "role": "user",
-                                "content": %s
+                                "content": $content
                             }
                         ]
                     }
@@ -29,11 +29,10 @@ public enum APISpec {
     ),
     GEMINI(
             "GEM_API_KEY",
-            // TODO: templatize the URL with the model name
-            "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent",
+            "https://generativelanguage.googleapis.com/v1/models/$modelName:generateContent",
             """
                     { "contents":[
-                           { "parts":[{"text": %s}]}
+                           { "parts":[{"text": $content}]}
                       ]
                     }
                     """,
@@ -52,12 +51,12 @@ public enum APISpec {
             "https://api.deepinfra.com/v1/openai/chat/completions",
             """
                     {
-                        "model": "%s",
-                        "max_tokens": 4096,
+                        "model": "$modelName",
+                        "max_tokens": 8192,
                         "messages": [
                             {
                                 "role": "user",
-                                "content": %s
+                                "content": $content
                             }
                         ]
                     }
@@ -73,20 +72,20 @@ public enum APISpec {
             "https://api.anthropic.com/v1/messages",
             """
                     {
-                        "model": "%s",
-                        "max_tokens": 4096,
+                        "model": "$modelName",
+                        "max_tokens": 8192,
                         "messages": [
                             {
                                 "role": "user",
-                                "content": %s
+                                "content": $content
                             }
                         ]
                     }
                     """,
             jsonStrResp -> {
                 final JSONObject respObj = new JSONObject(jsonStrResp);
-                final JSONArray choices = respObj.getJSONArray("choices");
-                return choices.getJSONObject(0).getJSONObject("message").getString("content");
+                final JSONArray choices = respObj.getJSONArray("content");
+                return choices.getJSONObject(0).getString("text");
             }
     );
 
