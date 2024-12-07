@@ -17,7 +17,7 @@ class GPTModelHelperTest {
         String expected =
                 "Qwen/QwQ-32B-Preview, 32000, 202401\n" +
                         "Qwen/Qwen2.5-Coder-32B-Instruct, 32000, 202401\n" +
-                        "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo, 32000, 202401\n" +
+                        "meta-llama/Llama-3.3-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
                         "deepseek-ai/DeepSeek-V2.5, 65536, 202401\n" +
                         "chatgpt-4o-latest, 128000, 202310\n" +

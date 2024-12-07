@@ -87,6 +87,27 @@ public enum APISpec {
                 final JSONArray choices = respObj.getJSONArray("content");
                 return choices.getJSONObject(0).getString("text");
             }
+    ),
+    MISTRAL(
+            "MISTRAL_API_KEY",
+            "https://api.mistral.ai/v1/chat/completions",
+            """
+                    {
+                        "model": "$modelName",
+                        "max_tokens": 8192,
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": $content
+                            }
+                        ]
+                    }
+                    """,
+            jsonStrResp -> {
+                final JSONObject respObj = new JSONObject(jsonStrResp);
+                final JSONArray choices = respObj.getJSONArray("choices");
+                return choices.getJSONObject(0).getJSONObject("message").getString("content");
+            }
     );
 
     private final String apiKeyEnvVar;
