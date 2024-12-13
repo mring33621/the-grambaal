@@ -6,6 +6,7 @@ public enum GPTModel {
     GPT_o1_mini("o1-mini", 128000, 202310),
     GEM_1_5_PRO_LATEST("gemini-1.5-pro", 1048576, 202409),
     GEM_1_5_FLASH_LATEST("gemini-1.5-flash", 1048576, 202409),
+    GEM_2_0_FLASH_LATEST("gemini-2.0-flash-exp", 1048576, 202412),
     DINFRA_QWEN_QwQ_32B("Qwen/QwQ-32B-Preview", 32000, 202401),
     DINFRA_QWEN_2_5_CODER("Qwen/Qwen2.5-Coder-32B-Instruct", 32000, 202401),
     DINFRA_LLAMA_3_3_TURBO_70B("meta-llama/Llama-3.3-70B-Instruct-Turbo", 32000, 202401),

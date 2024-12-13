@@ -27,7 +27,8 @@ class GPTModelHelperTest {
                         "claude-3-5-haiku-20241022, 200000, 202407\n" +
                         "claude-3-5-sonnet-20241022, 200000, 202404\n" +
                         "gemini-1.5-pro, 1048576, 202409\n" +
-                        "gemini-1.5-flash, 1048576, 202409";
+                        "gemini-1.5-flash, 1048576, 202409\n" +
+                        "gemini-2.0-flash-exp, 1048576, 202412";
         assertEquals(expected, observed);
     }
 
