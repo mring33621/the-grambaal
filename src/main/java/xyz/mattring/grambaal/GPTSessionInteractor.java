@@ -54,6 +54,7 @@ public class GPTSessionInteractor implements Runnable {
     }
 
     static HttpResponse<String> post(APISpec apiSpec, String apiKey, String modelName, String content) throws IOException {
+        String apiVersion = "v1";
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2);
         try (HttpClient httpClient = builder.build()) {
@@ -66,6 +67,10 @@ public class GPTSessionInteractor implements Runnable {
                 authHdrKey = "Authorization";
                 authHdrVal = "Bearer " + apiKey;
             } else if (apiSpec == APISpec.GEMINI) {
+                // experimental models seem to use alpha api version
+                if (modelName.endsWith("-exp")) {
+                    apiVersion = "v1alpha";
+                }
                 authHdrKey = "x-goog-api-key";
                 authHdrVal = apiKey;
             } else if (apiSpec == APISpec.CLAUDE) {
@@ -81,11 +86,13 @@ public class GPTSessionInteractor implements Runnable {
                     .replace("$modelName", modelName)
                     .replace("$content", JSONObject.quote(content));
             System.out.println("reqBody:\n" + reqBody);
-            final String reqUrl = apiSpec.getApiUrl().replace("$modelName", modelName);
+            final String reqUrl = apiSpec.getApiUrl()
+                    .replace("$apiVersion", apiVersion)
+                    .replace("$modelName", modelName);
             System.out.println("reqUrl:\n" + reqUrl);
             HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
                     .uri(URI.create(reqUrl))
-                    .timeout(Duration.ofSeconds(150L))
+                    .timeout(Duration.ofSeconds(180L))
                     .header("Content-Type", "application/json")
                     .header(authHdrKey, authHdrVal)
                     .POST(HttpRequest.BodyPublishers.ofString(reqBody));
