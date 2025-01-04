@@ -17,9 +17,10 @@ class GPTModelHelperTest {
         String expected =
                 "Qwen/QwQ-32B-Preview, 32000, 202401\n" +
                         "Qwen/Qwen2.5-Coder-32B-Instruct, 32000, 202401\n" +
+                        "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Llama-3.3-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
-                        "deepseek-ai/DeepSeek-V2.5, 65536, 202401\n" +
+                        "deepseek-ai/DeepSeek-V3, 65536, 202401\n" +
                         "chatgpt-4o-latest, 128000, 202310\n" +
                         "o1-preview, 128000, 202310\n" +
                         "o1-mini, 128000, 202310\n" +
@@ -28,7 +29,7 @@ class GPTModelHelperTest {
                         "claude-3-5-sonnet-20241022, 200000, 202404\n" +
                         "gemini-1.5-pro, 1048576, 202409\n" +
                         "gemini-1.5-flash, 1048576, 202409\n" +
-                        "gemini-2.0-flash-exp, 1048576, 202412";
+                        "gemini-2.0-flash-exp, 1048576, 202411";
         assertEquals(expected, observed);
     }
 

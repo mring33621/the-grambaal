@@ -29,7 +29,7 @@ public enum APISpec {
     ),
     GEMINI(
             "GEM_API_KEY",
-            "https://generativelanguage.googleapis.com/v1/models/$modelName:generateContent",
+            "https://generativelanguage.googleapis.com/$apiVersion/models/$modelName:generateContent",
             """
                     { "contents":[
                            { "parts":[{"text": $content}]}
