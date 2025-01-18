@@ -50,6 +50,8 @@ public class GPTModelHelper {
             return Optional.of(APISpec.GEMINI);
         } else if (modelName.startsWith("claude-")) {
             return Optional.of(APISpec.CLAUDE);
+        } else if (modelName.contains("stral-")) {
+            return Optional.of(APISpec.MISTRAL);
         } else if (modelName.startsWith("grok-")) {
             return Optional.of(APISpec.XAI);
         } else if (modelName.contains("/")) {
