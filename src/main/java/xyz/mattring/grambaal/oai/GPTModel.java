@@ -15,7 +15,8 @@ public enum GPTModel {
     DINFRA_NEMO("nvidia/Llama-3.1-Nemotron-70B-Instruct", 128000, 202401),
     DINFRA_DEEPSEEK("deepseek-ai/DeepSeek-V3", 65536, 202401),
     CLAUDE_3_5_HAIKU("claude-3-5-haiku-20241022", 200000, 202407),
-    CLAUDE_3_5_SONNET("claude-3-5-sonnet-20241022", 200000, 202404);
+    CLAUDE_3_5_SONNET("claude-3-5-sonnet-20241022", 200000, 202404),
+    XAI_GROK_2_LATEST("grok-2-latest",131072, 202406);
 
     private final String modelName;
     private final int maxTokens;

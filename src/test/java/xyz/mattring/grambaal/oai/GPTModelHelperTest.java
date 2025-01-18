@@ -25,6 +25,7 @@ class GPTModelHelperTest {
                         "o1-preview, 128000, 202310\n" +
                         "o1-mini, 128000, 202310\n" +
                         "nvidia/Llama-3.1-Nemotron-70B-Instruct, 128000, 202401\n" +
+                        "grok-2-latest, 131072, 202406\n" +
                         "claude-3-5-haiku-20241022, 200000, 202407\n" +
                         "claude-3-5-sonnet-20241022, 200000, 202404\n" +
                         "gemini-1.5-pro, 1048576, 202409\n" +

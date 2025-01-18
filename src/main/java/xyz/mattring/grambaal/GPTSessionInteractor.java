@@ -61,9 +61,9 @@ public class GPTSessionInteractor implements Runnable {
             String authHdrKey;
             String authHdrVal;
             Map<String, String> extraHeaders = new HashMap<>();
-            // TODO: would be nice if the API spec provided better parts, to avoid this if-then logic here
-            if (apiSpec == APISpec.GPT || apiSpec == APISpec.DINFRA) {
-                // NOTE: DeepInfra provides an OpenAI API-compatible endpoint
+            // TODO: would be nice if the APISpec provided better parts, to avoid this if-then logic here
+            if (apiSpec == APISpec.GPT || apiSpec == APISpec.DINFRA || apiSpec == APISpec.XAI) {
+                // NOTE: DeepInfra and XAI provide an OpenAI API-compatible endpoint
                 authHdrKey = "Authorization";
                 authHdrVal = "Bearer " + apiKey;
             } else if (apiSpec == APISpec.GEMINI) {
