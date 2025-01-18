@@ -20,6 +20,7 @@ class GPTModelHelperTest {
                         "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Llama-3.3-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
+                        "NovaSky-AI/Sky-T1-32B-Preview, 32768, 202401\n" +
                         "deepseek-ai/DeepSeek-V3, 65536, 202401\n" +
                         "chatgpt-4o-latest, 128000, 202310\n" +
                         "o1-preview, 128000, 202310\n" +

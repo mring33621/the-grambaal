@@ -9,6 +9,7 @@ public enum GPTModel {
     GEM_2_0_FLASH_LATEST("gemini-2.0-flash-exp", 1048576, 202411),
     DINFRA_QWEN_QwQ_32B("Qwen/QwQ-32B-Preview", 32000, 202401),
     DINFRA_QWEN_2_5_CODER("Qwen/Qwen2.5-Coder-32B-Instruct", 32000, 202401),
+    DINFRA_SKY_T1("NovaSky-AI/Sky-T1-32B-Preview", 32768, 202401),
     DINFRA_LLAMA_3_1_TURBO_70B("meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo", 32000, 202401),
     DINFRA_LLAMA_3_3_TURBO_70B("meta-llama/Llama-3.3-70B-Instruct-Turbo", 32000, 202401),
     DINFRA_LLAMA_3_1_405B("meta-llama/Meta-Llama-3.1-405B-Instruct", 32000, 202401),
