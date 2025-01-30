@@ -15,18 +15,20 @@ class GPTModelHelperTest {
                 .collect(Collectors.joining("\n"));
 //        System.out.println(observed);
         String expected =
-                "Qwen/QwQ-32B-Preview, 32000, 202401\n" +
+                "deepseek-ai/DeepSeek-V3, 16000, 202401\n" +
+                        "deepseek-ai/DeepSeek-R1, 16000, 202401\n" +
+                        "Qwen/QwQ-32B-Preview, 32000, 202401\n" +
                         "Qwen/Qwen2.5-Coder-32B-Instruct, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Llama-3.3-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
                         "NovaSky-AI/Sky-T1-32B-Preview, 32768, 202401\n" +
-                        "deepseek-ai/DeepSeek-V3, 65536, 202401\n" +
                         "chatgpt-4o-latest, 128000, 202310\n" +
                         "o1-preview, 128000, 202310\n" +
                         "o1-mini, 128000, 202310\n" +
                         "nvidia/Llama-3.1-Nemotron-70B-Instruct, 128000, 202401\n" +
                         "ministral-8b-latest, 128000, 202404\n" +
+                        "deepseek-ai/DeepSeek-R1-Distill-Llama-70B, 131000, 202401\n" +
                         "mistral-large-latest, 131000, 202404\n" +
                         "grok-2-latest, 131072, 202406\n" +
                         "claude-3-5-haiku-20241022, 200000, 202407\n" +
