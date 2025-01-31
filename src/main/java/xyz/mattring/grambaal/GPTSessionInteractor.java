@@ -69,7 +69,7 @@ public class GPTSessionInteractor implements Runnable {
                 authHdrVal = "Bearer " + apiKey;
             } else if (apiSpec == APISpec.GEMINI) {
                 // experimental models seem to use alpha api version
-                if (modelName.endsWith("-exp")) {
+                if (modelName.contains("-exp")) {
                     apiVersion = "v1alpha";
                 }
                 authHdrKey = "x-goog-api-key";

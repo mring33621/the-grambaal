@@ -22,6 +22,7 @@ class GPTModelHelperTest {
                         "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Llama-3.3-70B-Instruct-Turbo, 32000, 202401\n" +
                         "meta-llama/Meta-Llama-3.1-405B-Instruct, 32000, 202401\n" +
+                        "mistral-small-latest, 32000, 202404\n" +
                         "NovaSky-AI/Sky-T1-32B-Preview, 32768, 202401\n" +
                         "chatgpt-4o-latest, 128000, 202310\n" +
                         "o1-preview, 128000, 202310\n" +
@@ -36,7 +37,9 @@ class GPTModelHelperTest {
                         "codestral-latest, 256000, 202404\n" +
                         "gemini-1.5-pro, 1048576, 202409\n" +
                         "gemini-1.5-flash, 1048576, 202409\n" +
-                        "gemini-2.0-flash-exp, 1048576, 202411";
+                        "gemini-2.0-flash-exp, 1048576, 202411\n" +
+                        "gemini-2.0-flash-thinking-exp-01-21, 1048576, 202411\n" +
+                        "gemini-exp-1206, 1048576, 202411";
         assertEquals(expected, observed);
     }
 

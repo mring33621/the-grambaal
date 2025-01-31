@@ -7,6 +7,8 @@ public enum GPTModel {
     GEM_1_5_PRO_LATEST("gemini-1.5-pro", 1048576, 202409),
     GEM_1_5_FLASH_LATEST("gemini-1.5-flash", 1048576, 202409),
     GEM_2_0_FLASH_LATEST("gemini-2.0-flash-exp", 1048576, 202411),
+    GEM_2_0_FLASH_THINK_LATEST("gemini-2.0-flash-thinking-exp-01-21", 1048576, 202411),
+    GEM_EXP("gemini-exp-1206", 1048576, 202411),
     DINFRA_QWEN_QwQ_32B("Qwen/QwQ-32B-Preview", 32000, 202401),
     DINFRA_QWEN_2_5_CODER("Qwen/Qwen2.5-Coder-32B-Instruct", 32000, 202401),
     DINFRA_SKY_T1("NovaSky-AI/Sky-T1-32B-Preview", 32768, 202401),
@@ -20,6 +22,7 @@ public enum GPTModel {
     CLAUDE_3_5_HAIKU("claude-3-5-haiku-20241022", 200000, 202407),
     CLAUDE_3_5_SONNET("claude-3-5-sonnet-20241022", 200000, 202404),
     MISTRAL_MINI_8B("ministral-8b-latest", 128000, 202404),
+    MISTRAL_SMALL("mistral-small-latest", 32000, 202404),
     MISTRAL_LARGE("mistral-large-latest", 131000, 202404),
     MISTRAL_CODESTRAL("codestral-latest", 256000, 202404),
     XAI_GROK_2_LATEST("grok-2-latest",131072, 202406);
